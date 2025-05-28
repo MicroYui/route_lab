@@ -7,10 +7,10 @@ DELTA_T = 1                   # 决策时间间隔 (Δt), 例如: 1 秒
 
 # UAV 基本参数
 N_UAVS = 20                   # 无人机总数 (N) - 可根据 DRLFR/QTAR 调整
-UAV_MAX_QUEUE_LENGTH = 1000    # 无人机的最大数据队列长度 (Q_max) - 包的数量
-UAV_MAX_ENERGY = 50000.0        # 无人机的最大电池容量 (E_max) - 能量单位，例如mJ
+UAV_MAX_QUEUE_LENGTH = 10000    # 无人机的最大数据队列长度 (Q_max) - 包的数量
+UAV_MAX_ENERGY = 5500.0        # 无人机的最大电池容量 (E_max) - 能量单位，例如mJ
 UAV_MIN_ENERGY = 5000.0         # 无人机的最低安全电量 (E_min) - 能量单位
-UAV_MAX_TRANS_POWER = 0.1     # 无人机转发时的最大功率 (P_max_trans) 单位: 瓦特 (例如 DRLFR 中的 100mW)
+UAV_MAX_TRANS_POWER = 1     # 无人机转发时的最大功率 (P_max_trans) 单位: 瓦特 (例如 DRLFR 中的 100mW)
 UAV_MAX_SPEED = 20.0            # 最大速度 (米/秒), 可根据 DRLFR/QTAR 调整
 UAV_MIN_SPEED = 5.0            # 最小速度 (米/秒)
 
@@ -18,11 +18,11 @@ UAV_MIN_SPEED = 5.0            # 最小速度 (米/秒)
 RHO_0 = 1e-4                  # 参考距离下的信道功率 (假设值, G_i*G_j*lambda^2 / (4pi)^2)
                                 # 需要根据天线增益 G 和波长 lambda 具体设定或校准
 NOISE_POWER = 0.8e-12           # 噪声功率 (sigma^2) 单位: 瓦特 (例如, -90 dBm)
-BANDWIDTH = 20e6              # 带宽 (B) 单位: 赫兹 (例如 DRLFR 中的 20 MHz)
+BANDWIDTH = 20              # 带宽 (B) 单位: 赫兹 (例如 DRLFR 中的 20 MHz)
 MAX_COMMUNICATION_RANGE = 250.0 # 最大通信距离 (d_max) 单位: 米
 
 # 李雅普诺夫优化参数
-LYAPUNOV_BETA = 1.0          # 权重参数 β
+LYAPUNOV_BETA = 1.0e11          # 权重参数 β
 LYAPUNOV_GAMMA = 0.1          # 权重参数 γ
 LYAPUNOV_EPSILON = 1e-6         # 小的正数常量 ε (用于避免除零)
 LYAPUNOV_V = 1000.0              # 漂移加惩罚中的权衡参数 V
@@ -55,4 +55,4 @@ ENERGY_BALANCE_WINDOW = 100 # 计算能量均衡度的移动窗口或最终计�
 DEBUG_LEVEL = 1 # 0: 无, 1: 信息, 2: 详细
 
 # 随机数种子
-SIMULATION_SEED = 2
+SIMULATION_SEED = 1

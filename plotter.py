@@ -51,7 +51,7 @@ def plot_uav_trajectories_2d(simulation_log, num_uavs, output_dir="plots"):
     plt.gca().set_aspect('equal', adjustable='box')
     plt.tight_layout(rect=[0, 0, 0.85 if num_uavs <= 10 else 1, 1])
 
-    filename = os.path.join(output_dir, "uav_trajectories_2d.png")
+    filename = os.path.join(output_dir, "uav_trajectories_2d.svg")
     plt.savefig(filename)
     print(f"2D轨迹图已保存到: {filename}")
 
@@ -104,7 +104,7 @@ def plot_metric_over_time(simulation_log, num_uavs, metric_key, title, ylabel, o
     plt.grid(True);
     plt.tight_layout(rect=[0, 0, 0.85 if num_uavs <= 10 else 1, 1])
 
-    filename = os.path.join(output_dir, f"{metric_key.replace(' ', '_')}_over_time.png")
+    filename = os.path.join(output_dir, f"{metric_key.replace(' ', '_')}_over_time.svg")
     plt.savefig(filename);
     print(f"{title} 图已保存到: {filename}")
 

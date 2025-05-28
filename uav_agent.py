@@ -208,10 +208,18 @@ class UAV:
                 print(f"\n[调试 UAV {self.id} -> {j_id} @ t={current_time:.1f}s]")
                 print(
                     f"  状态: Q(bits)={self.data_queue_bits:.0f}, E(mJ)={self.energy:.1f}, F(mJ)={self.virtual_energy_queue:.1f}")
+                print(f" Qi(t): {Q_i_t_for_D:.3e}")
                 print(f"  决策系数 D_i_t (QΔt+V): {D_i_t:.3e}")
+                print(f"  Psi_i_t: {Psi_i_t:.3e}")
+                print(f"  self.virtual_energy_queue: {self.virtual_energy_queue:.3e}")
                 print(f"  能量系数 Psi_i_t: {Psi_i_t:.3e} (1/mJ)")
                 print(f"  能耗成本系数 C_i_t (βΨ+γF): {C_i_t:.3e}")
                 print(f"  P* 分子 (D_i_t*B): {numerator_P_star:.3e}")
+                print(f"  P* 分母 (C_i_t*Δt*log2): {denominator_P_star:.3e}")
+                print(f" P* :{numerator_P_star/denominator_P_star:.3e} ")
+                print(f" 后一项分子 :{N_ij:.3e} ")
+                print(f" 后一项分母 :{h_ij:.3e} ")
+                print(f" 后一项 :{N_ij / h_ij:.3e} ")
 
             r_ij_opt_bps = 0.0
             if P_ij_trans_opt > 1e-9:
