@@ -79,23 +79,23 @@ class GaussMarkovMobilityModel:
         reflected = False
 
         if potential_next_pos_x < 0:
-            self.current_pos[0] = 0;
-            self.current_heading_xy = math.pi - self.current_heading_xy;
+            self.current_pos[0] = 0
+            self.current_heading_xy = math.pi - self.current_heading_xy
             reflected = True
         elif potential_next_pos_x > AREA_WIDTH:
-            self.current_pos[0] = AREA_WIDTH;
-            self.current_heading_xy = math.pi - self.current_heading_xy;
+            self.current_pos[0] = AREA_WIDTH
+            self.current_heading_xy = math.pi - self.current_heading_xy
             reflected = True
         else:
             self.current_pos[0] = potential_next_pos_x
 
         if potential_next_pos_y < 0:
-            self.current_pos[1] = 0;
-            self.current_heading_xy = -self.current_heading_xy;
+            self.current_pos[1] = 0
+            self.current_heading_xy = -self.current_heading_xy
             reflected = True
         elif potential_next_pos_y > AREA_HEIGHT:
-            self.current_pos[1] = AREA_HEIGHT;
-            self.current_heading_xy = -self.current_heading_xy;
+            self.current_pos[1] = AREA_HEIGHT
+            self.current_heading_xy = -self.current_heading_xy
             reflected = True
         else:
             self.current_pos[1] = potential_next_pos_y
