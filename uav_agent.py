@@ -49,7 +49,8 @@ class UAV:
         self.current_velocity = new_vel_list[:2]  # 确保是二维
 
         self.time_since_last_hello += DELTA_T
-        if self.id < N_UAVS / 4:
+        # if self.id < N_UAVS / 4:
+        if self.id in DATA_SOURCE_UAV_IDS:
             self.generate_data(current_time)
 
     def generate_data(self, current_time):  # 逻辑不变

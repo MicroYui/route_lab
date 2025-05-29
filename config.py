@@ -6,7 +6,7 @@ TOTAL_SIMULATION_TIME = 3600  # 救援总时间 (T), 例如: 1 小时 = 3600秒
 DELTA_T = 1                   # 决策时间间隔 (Δt), 例如: 1 秒
 
 # UAV 基本参数
-N_UAVS = 20                   # 无人机总数 (N) - 可根据 DRLFR/QTAR 调整
+N_UAVS = 10                   # 无人机总数 (N) - 可根据 DRLFR/QTAR 调整
 UAV_MAX_QUEUE_LENGTH = 10000    # 无人机的最大数据队列长度 (Q_max) - 包的数量
 UAV_MAX_ENERGY = 5500.0        # 无人机的最大电池容量 (E_max) - 能量单位，例如mJ
 UAV_MIN_ENERGY = 5000.0         # 无人机的最低安全电量 (E_min) - 能量单位
@@ -41,11 +41,29 @@ GM_STD_ANGLE_CHANGE = 15      # 角度变化标准差 (单位: 度)
 AREA_WIDTH = 1000             # 区域宽度 (米)
 AREA_HEIGHT = 1000            # 区域高度 (米)
 
+USE_MANUAL_UAV_POSITIONS = True # True: 使用下面的列表; False: 随机生成初始位置
+UAV_INITIAL_POSITIONS = [
+    (200.0, 200.0), # UAV 0
+    (200.0, 400.0), # UAV 1
+    (400.0, 200.0), # UAV 2
+    (400.0, 400.0), # UAV 3
+    (400.0, 600.0), # UAV 4
+    (400.0, 800.0), # UAV 5
+    (600.0, 200.0), # UAV 6
+    (600.0, 400.0), # UAV 7
+    (600.0, 600.0), # UAV 8
+    (600.0, 800.0)  # UAV 9
+]
+
+# 列出作为数据源的无人机的ID（从0开始计数）
+DATA_SOURCE_UAV_IDS = [1, 5]
+
 # 数据中心
-DATA_CENTER_POSITION = (AREA_WIDTH / 2, AREA_HEIGHT / 2) # 数据中心位置 (D)
+# DATA_CENTER_POSITION = (AREA_WIDTH / 2, AREA_HEIGHT / 2) # 数据中心位置 (D)
+DATA_CENTER_POSITION = (800, 500) # 数据中心位置 (D)
 
 # 数据产生速率 (lambda_i(t)) - 每个 DELTA_T 产生的数据包数
-DATA_GENERATION_RATE_AVG = 0.5  # 平均每个时间单位产生0.5个数据包 (泊松分布均值)
+DATA_GENERATION_RATE_AVG = 0.2  # 平均每个时间单位产生0.5个数据包 (泊松分布均值)
 DATA_PACKET_SIZE_BITS = 1024 * 8 # 每个数据包的大小 (例如, 1KB)
 
 # 性能评价指标相关

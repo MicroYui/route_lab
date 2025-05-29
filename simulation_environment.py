@@ -22,22 +22,40 @@ class SimulationEnvironment:
         self.interference_estimation_for_decision = {i: 0.0 for i in range(num_uavs)}
         self.interference_estimation_for_decision["D"] = 0.0
 
-        initial_positions_set = set()
-        for i in range(num_uavs):
-            while True:
-                initial_pos_xy = (  # 生成二维初始位置
-                    random.uniform(0, AREA_WIDTH),
-                    random.uniform(0, AREA_HEIGHT)
-                )
-                if initial_pos_xy not in initial_positions_set:
-                    initial_positions_set.add(initial_pos_xy)
-                    break
+        if USE_MANUAL_UAV_POSITIONS:
+            if UAV_INITIAL_POSITIONS is None or len(UAV_INITIAL_POSITIONS) != self.num_uavs:
+                print(f"错误: USE_MANUAL_UAV_POSITIONS 为 True, 但 UAV_INITIAL_POSITIONS "
+                      f"未定义或其长度 ({len(UAV_INITIAL_POSITIONS) if UAV_INITIAL_POSITIONS else 'None'}) "
+                      f"与 N_UAVS ({self.num_uavs}) 不匹配。请检查 config.py。")
+                print("仿真将退出。")
+                exit()  # 或者抛出异常
+            print(f"信息: 正在使用 config.py 中手动设定的 {self.num_uavs} 个无人机初始位置。")
+            initial_positions_to_use = UAV_INITIAL_POSITIONS
+        else:
+            print(f"信息: USE_MANUAL_UAV_POSITIONS 为 False。将为 {self.num_uavs} 个无人机随机生成初始位置。")
+            initial_positions_to_use = []
+            temp_positions_set = set()  # 用于确保随机位置不完全重合
+            for _ in range(self.num_uavs):
+                while True:
+                    pos_candidate = (
+                        random.uniform(0, AREA_WIDTH),
+                        random.uniform(0, AREA_HEIGHT)
+                    )
+                    if pos_candidate not in temp_positions_set:
+                        temp_positions_set.add(pos_candidate)
+                        initial_positions_to_use.append(pos_candidate)
+                        break
+
+        for i in range(self.num_uavs):
+            initial_pos_xy = initial_positions_to_use[i]
 
             uav = UAV(uav_id=i,
-                      initial_pos_xy=list(initial_pos_xy),  # 传递二维
-                      data_center_pos_xy=self.data_center.get_position(),  # DC.get_position()现在返回二维
+                      initial_pos_xy=list(initial_pos_xy),
+                      data_center_pos_xy=self.data_center.get_position(),
                       sim_env=self)
             self.uavs.append(uav)
+            if DEBUG_LEVEL >= 1:
+                print(f"UAV {i} 初始化于位置: {initial_pos_xy}")
 
     def run_step(self):
         # ... (大部分 run_step 逻辑不变, 因为内部 UAV 和 DC 对象现在处理二维坐标) ...
