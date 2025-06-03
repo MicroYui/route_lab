@@ -82,7 +82,6 @@ class SimulationEnvironment:
             uav_receiver.cleanup_neighbors(self.current_time)
             for hello_msg in hello_messages_to_broadcast_this_step:
                 if uav_receiver.id == hello_msg["uav_id"]: continue
-                # hello_msg["position"] 已经是二维的了
                 distance_to_sender = calculate_distance(uav_receiver.get_position(), hello_msg["position"])
                 if distance_to_sender <= MAX_COMMUNICATION_RANGE:
                     uav_receiver.process_hello_message(hello_msg, self.current_time)
@@ -112,9 +111,9 @@ class SimulationEnvironment:
             if rx_node_object_pos_xy is None: continue
 
             channel_gain_h_ij = calculate_channel_gain(tx_uav.get_position(), rx_node_object_pos_xy)
-            if channel_gain_h_ij <= 1e-12:
-                tx_uav.last_successful_tx_rate_bps = 0.0
-                continue
+            # if channel_gain_h_ij <= 1e-12:
+            #     tx_uav.last_successful_tx_rate_bps = 0.0
+            #     continue
 
             current_link_interference_W = 0.0
             for (other_tx_id, _), other_tx_power_W in self.current_step_intended_transmissions.items():
@@ -124,6 +123,8 @@ class SimulationEnvironment:
                 if other_tx_uav_pos_xy is None: continue
 
                 channel_gain_h_kj_to_rx = calculate_channel_gain(other_tx_uav_pos_xy, rx_node_object_pos_xy)
+                # if tx_uav_id == 1:
+                    # print(f"UAV {tx_uav_id} -> {rx_node_id} 信道增益: {channel_gain_h_kj_to_rx:.2f} W, ")
                 current_link_interference_W += channel_gain_h_kj_to_rx * other_tx_power_W
 
             actual_sinr_on_link = calculate_sinr(tx_power_W, channel_gain_h_ij, current_link_interference_W)
@@ -131,6 +132,9 @@ class SimulationEnvironment:
 
             bits_can_be_transmitted_in_slot = actual_rate_bps_on_link * float(DELTA_T)
             bits_to_actually_transmit = min(tx_uav.data_queue_bits, bits_can_be_transmitted_in_slot)
+            # if tx_uav_id == 1:
+            #     print(f"UAV {tx_uav_id} -> {rx_node_id} 信噪比: {actual_sinr_on_link:.2f} W, ")
+            #     print(f"UAV {tx_uav_id} -> {rx_node_id} 传输速率: {bits_to_actually_transmit:.2f} bps, ")
 
             if actual_rate_bps_on_link > 0 and bits_to_actually_transmit >= 1:
                 tx_uav.last_successful_tx_rate_bps = actual_rate_bps_on_link
@@ -199,7 +203,7 @@ class SimulationEnvironment:
         # (此处的 first_dead_time_recorded 逻辑保持不变)
         if not hasattr(self, '_first_dead_time_recorded'):
             if any(uav.energy < UAV_MIN_ENERGY for uav in self.uavs):
-                first_uav_below_threshold_time = self.current_time;
+                first_uav_below_threshold_time = self.current_time
                 self._first_dead_time_recorded = True
         elif hasattr(self, '_first_dead_time_recorded') and self._first_dead_time_recorded:
             if self.simulation_log and self.simulation_log[-1].get("首个UAV低电量时间 (s)", -1.0) != -1.0:

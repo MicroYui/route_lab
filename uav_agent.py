@@ -6,6 +6,8 @@ from config import *  # UAV_MIN_SPEED, MAX_COMMUNICATION_RANGE etc.
 from utils import calculate_distance  # calculate_distance is now 2D
 from mobility_models import GaussMarkovMobilityModel  # Expects 2D initial_pos
 from communication_models import calculate_channel_gain  # Expects 2D positions
+import os
+import csv
 
 
 class UAV:
@@ -36,6 +38,16 @@ class UAV:
         self.chosen_next_hop_id = None
         self.chosen_tx_power_to_next_hop_W = 0.0
         self.last_successful_tx_rate_bps = 0.0
+
+        self.debug_file_path = f"debug_uav_{uav_id}.csv"
+        # 初始化CSV文件头
+        with open(self.debug_file_path, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerow([
+                'timestamp', 'uav_id', 'target_id', 'Q_i_t', 'D_i_t', 
+                'Psi_i_t', 'C_i_t', 'P_star', 'N_ij', 'h_ij', 
+                'correction_term', 'P_ij_trans_opt'
+            ])
 
     def get_position(self):
         """返回UAV的当前二维位置。"""
@@ -205,22 +217,14 @@ class UAV:
                 P_ij_trans_star = (numerator_P_star / denominator_P_star) - (N_ij / h_ij)
             P_ij_trans_opt = min(max(0.0, P_ij_trans_star), float(UAV_MAX_TRANS_POWER))
 
-            if self.id == 0 and (P_ij_trans_opt > 1e-9 or int(current_time) % 10 == 0):
-                print(f"\n[调试 UAV {self.id} -> {j_id} @ t={current_time:.1f}s]")
-                print(
-                    f"  状态: Q(bits)={self.data_queue_bits:.0f}, E(mJ)={self.energy:.1f}, F(mJ)={self.virtual_energy_queue:.1f}")
-                print(f" Qi(t): {Q_i_t_for_D:.3e}")
-                print(f"  决策系数 D_i_t (QΔt+V): {D_i_t:.3e}")
-                print(f"  Psi_i_t: {Psi_i_t:.3e}")
-                print(f"  self.virtual_energy_queue: {self.virtual_energy_queue:.3e}")
-                print(f"  能量系数 Psi_i_t: {Psi_i_t:.3e} (1/mJ)")
-                print(f"  能耗成本系数 C_i_t (βΨ+γF): {C_i_t:.3e}")
-                print(f"  P* 分子 (D_i_t*B): {numerator_P_star:.3e}")
-                print(f"  P* 分母 (C_i_t*Δt*log2): {denominator_P_star:.3e}")
-                print(f" P* :{numerator_P_star/denominator_P_star:.3e} ")
-                print(f" 后一项分子 :{N_ij:.3e} ")
-                print(f" 后一项分母 :{h_ij:.3e} ")
-                print(f" 后一项 :{N_ij / h_ij:.3e} ")
+            if self.id == 1 and (P_ij_trans_opt > 1e-9 or int(current_time) % 10 == 0):
+                # 直接追加写入CSV
+                self._write_debug_to_csv([
+                    current_time, self.id, j_id, Q_i_t_for_D, D_i_t,
+                    Psi_i_t, C_i_t,
+                    numerator_P_star/denominator_P_star if abs(denominator_P_star) > 1e-9 else 0,
+                    N_ij, h_ij, N_ij / h_ij, P_ij_trans_opt
+                ])
 
             r_ij_opt_bps = 0.0
             if P_ij_trans_opt > 1e-9:
@@ -252,7 +256,7 @@ class UAV:
             self.current_tx_power_W = self.chosen_tx_power_to_next_hop_W
             return self.chosen_next_hop_id, self.chosen_tx_power_to_next_hop_W
         else:
-            self.chosen_next_hop_id = None;
+            self.chosen_next_hop_id = None
             self.chosen_tx_power_to_next_hop_W = 0.0
             self.current_tx_power_W = 0.0
             return None, 0.0
@@ -272,3 +276,12 @@ class UAV:
 
         accumulated_change = self.current_tx_power_W * float(DELTA_T) - self.P_avg * float(DELTA_T)
         self.virtual_energy_queue = max(0.0, self.virtual_energy_queue + accumulated_change)
+
+    def _write_debug_to_csv(self, row_data):
+        """追加写入CSV文件"""
+        try:
+            with open(self.debug_file_path, 'a', newline='', encoding='utf-8') as f:
+                writer = csv.writer(f)
+                writer.writerow(row_data)
+        except Exception as e:
+            print(f"写入CSV文件失败: {e}")
