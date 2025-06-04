@@ -22,7 +22,7 @@ BANDWIDTH = 20e6              # 带宽 (B) 单位: 赫兹 (例如 DRLFR 中的 2
 MAX_COMMUNICATION_RANGE = 250.0 # 最大通信距离 (d_max) 单位: 米
 
 # 李雅普诺夫优化参数
-LYAPUNOV_BETA = 1.0e15          # 权重参数 β
+LYAPUNOV_BETA = 1.0e16          # 权重参数 β
 LYAPUNOV_GAMMA = 0.1          # 权重参数 γ
 LYAPUNOV_EPSILON = 1e-6         # 小的正数常量 ε (用于避免除零)
 LYAPUNOV_V = 1.0e6             # 漂移加惩罚中的权衡参数 V
@@ -63,7 +63,7 @@ DATA_SOURCE_UAV_IDS = [1, 5]
 DATA_CENTER_POSITION = (800, 500) # 数据中心位置 (D)
 
 # 数据产生速率 (lambda_i(t)) - 每个 DELTA_T 产生的数据包数
-DATA_GENERATION_RATE_AVG = 15  # 平均每个时间单位产生个数据包 (泊松分布均值)
+DATA_GENERATION_RATE_AVG = 150  # 平均每个时间单位产生个数据包 (泊松分布均值)
 DATA_PACKET_SIZE_BITS = 1024 * 8 # 每个数据包的大小 (例如, 1KB)
 
 # 性能评价指标相关

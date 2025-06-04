@@ -1,1 +1,1 @@
-timestamp,uav_id,target_id,Q_i_t,D_i_t,Psi_i_t,C_i_t,P_star,N_ij,h_ij,correction_term,P_ij_trans_opt
+timestamp,uav_id,target_id,Q_i_t,D_i_t,Psi_i_t,C_i_t,beta_Psi_i_t,gamma_F_t,up,down,P_star,N_ij,h_ij,correction_term,P_ij_trans_opt

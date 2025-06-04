@@ -45,7 +45,7 @@ class UAV:
             writer = csv.writer(f)
             writer.writerow([
                 'timestamp', 'uav_id', 'target_id', 'Q_i_t', 'D_i_t', 
-                'Psi_i_t', 'C_i_t', 'P_star', 'N_ij', 'h_ij', 
+                'Psi_i_t', 'C_i_t', 'beta_Psi_i_t', 'gamma_F_t', 'up', 'down', 'P_star', 'N_ij', 'h_ij',
                 'correction_term', 'P_ij_trans_opt'
             ])
 
@@ -174,7 +174,9 @@ class UAV:
 
         energy_denom = max(self.energy - float(UAV_MIN_ENERGY), 0.0) + float(LYAPUNOV_EPSILON)
         Psi_i_t = ((float(UAV_MAX_ENERGY) - float(UAV_MIN_ENERGY)) ** 2 / (energy_denom ** 3))
-        C_i_t = float(LYAPUNOV_BETA) * Psi_i_t + float(LYAPUNOV_GAMMA) * self.virtual_energy_queue
+        beta_Psi_i_t = float(LYAPUNOV_BETA) * Psi_i_t
+        gamma_F_i_t = float(LYAPUNOV_GAMMA) * self.virtual_energy_queue
+        C_i_t = beta_Psi_i_t + gamma_F_i_t
         Q_i_t_for_D = self.data_queue_bits
         D_i_t = Q_i_t_for_D * float(DELTA_T) + float(LYAPUNOV_V)
 
@@ -221,7 +223,7 @@ class UAV:
                 # 直接追加写入CSV
                 self._write_debug_to_csv([
                     current_time, self.id, j_id, Q_i_t_for_D, D_i_t,
-                    Psi_i_t, C_i_t,
+                    Psi_i_t, C_i_t, beta_Psi_i_t, gamma_F_i_t, numerator_P_star, denominator_P_star,
                     numerator_P_star/denominator_P_star if abs(denominator_P_star) > 1e-9 else 0,
                     N_ij, h_ij, N_ij / h_ij, P_ij_trans_opt
                 ])
