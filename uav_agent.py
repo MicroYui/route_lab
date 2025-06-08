@@ -172,8 +172,9 @@ class UAV:
             self.current_tx_power_W = 0.0
             return None, 0.0
 
-        energy_denom = max(self.energy - float(UAV_MIN_ENERGY), 0.0) + float(LYAPUNOV_EPSILON)
-        Psi_i_t = ((float(UAV_MAX_ENERGY) - float(UAV_MIN_ENERGY)) ** 2 / (energy_denom ** 3))
+        # energy_denom = max(self.energy - float(UAV_MIN_ENERGY), 0.0) + float(LYAPUNOV_EPSILON)
+        # Psi_i_t = ((float(UAV_MAX_ENERGY) - float(UAV_MIN_ENERGY)) ** 2 / (energy_denom ** 3))
+        Psi_i_t = float(20) - self.energy
         beta_Psi_i_t = float(LYAPUNOV_BETA) * Psi_i_t
         gamma_F_i_t = float(LYAPUNOV_GAMMA) * self.virtual_energy_queue
         C_i_t = beta_Psi_i_t + gamma_F_i_t

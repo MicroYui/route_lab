@@ -7,7 +7,7 @@ DELTA_T = 1                   # 决策时间间隔 (Δt), 例如: 1 秒
 
 # UAV 基本参数
 N_UAVS = 10                   # 无人机总数 (N) - 可根据 DRLFR/QTAR 调整
-UAV_MAX_QUEUE_LENGTH = 10000    # 无人机的最大数据队列长度 (Q_max) - 包的数量
+UAV_MAX_QUEUE_LENGTH = 1000000    # 无人机的最大数据队列长度 (Q_max) - 包的数量
 UAV_MAX_ENERGY = 15.0        # 无人机的最大电池容量 (E_max) - 能量单位，例如mJ
 UAV_MIN_ENERGY = 0.0         # 无人机的最低安全电量 (E_min) - 能量单位
 UAV_MAX_TRANS_POWER = 0.2     # 无人机转发时的最大功率 (P_max_trans) 单位: 瓦特 (例如 DRLFR 中的 100mW)
@@ -22,8 +22,8 @@ BANDWIDTH = 20e6              # 带宽 (B) 单位: 赫兹 (例如 DRLFR 中的 2
 MAX_COMMUNICATION_RANGE = 250.0 # 最大通信距离 (d_max) 单位: 米
 
 # 李雅普诺夫优化参数
-LYAPUNOV_BETA = 1.0e16          # 权重参数 β
-LYAPUNOV_GAMMA = 0.1          # 权重参数 γ
+LYAPUNOV_BETA = 1.0e15          # 权重参数 β
+LYAPUNOV_GAMMA = 1.0e15          # 权重参数 γ
 LYAPUNOV_EPSILON = 1e-6         # 小的正数常量 ε (用于避免除零)
 LYAPUNOV_V = 1.0e6             # 漂移加惩罚中的权衡参数 V
 
@@ -63,7 +63,7 @@ DATA_SOURCE_UAV_IDS = [1, 5]
 DATA_CENTER_POSITION = (800, 500) # 数据中心位置 (D)
 
 # 数据产生速率 (lambda_i(t)) - 每个 DELTA_T 产生的数据包数
-DATA_GENERATION_RATE_AVG = 150  # 平均每个时间单位产生个数据包 (泊松分布均值)
+DATA_GENERATION_RATE_AVG = 200  # 平均每个时间单位产生个数据包 (泊松分布均值)
 DATA_PACKET_SIZE_BITS = 1024 * 8 # 每个数据包的大小 (例如, 1KB)
 
 # 性能评价指标相关
