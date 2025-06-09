@@ -109,4 +109,40 @@ def plot_metric_over_time(simulation_log, num_uavs, metric_key, title, ylabel, o
     print(f"{title} 图已保存到: {filename}")
 
 
+def plot_comparison(results_df, kpi_key, title, ylabel, output_dir="plots"):
+    """
+    绘制不同算法在不同无人机数量下的性能指标对比图。
+
+    参数:
+        results_df (pd.DataFrame): 包含 'num_uavs', 'algorithm', 和 kpi_key 列的数据。
+        kpi_key (str): 要绘制的性能指标列的名称。
+        title (str): 图表标题。
+        ylabel (str): Y轴标签。
+        output_dir (str): 图表保存目录。
+    """
+    if results_df.empty:
+        print(f"没有数据可供绘制 '{title}' 对比图。")
+        return
+
+    plt.figure(figsize=(10, 6))
+
+    # 使用groupby按算法名称分组，为每个算法绘制一条线
+    for name, group in results_df.groupby('algorithm'):
+        # 按无人机数量排序以正确连接线上的点
+        group = group.sort_values('num_uavs')
+        plt.plot(group['num_uavs'], group[kpi_key], marker='o', linestyle='-', label=name)
+
+    plt.title(title)
+    plt.xlabel('无人机数量 (N)')
+    plt.ylabel(ylabel)
+    plt.xticks(results_df['num_uavs'].unique())  # 确保X轴刻度是实际测试的UAV数量
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+
+    filename = os.path.join(output_dir, f"comparison_{kpi_key}.svg")
+    plt.savefig(filename, format='svg')
+    print(f"对比图已保存到: {filename}")
+
+
 def show_all_plots(): plt.show()

@@ -5,6 +5,10 @@
 TOTAL_SIMULATION_TIME = 3600  # 救援总时间 (T), 例如: 1 小时 = 3600秒
 DELTA_T = 1                   # 决策时间间隔 (Δt), 例如: 1 秒
 
+# 决策算法选择与参数
+DECISION_ALGORITHM = "lyapunov"  # 可选: "lyapunov", "greedy_max_power", "greedy_fixed_power", "load_balancing"
+GREEDY_FIXED_TRANSMIT_POWER_W = 0.1
+
 # UAV 基本参数
 N_UAVS = 10                   # 无人机总数 (N) - 可根据 DRLFR/QTAR 调整
 UAV_MAX_QUEUE_LENGTH = 1000000    # 无人机的最大数据队列长度 (Q_max) - 包的数量

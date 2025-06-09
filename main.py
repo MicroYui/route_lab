@@ -5,7 +5,7 @@ import time
 import numpy as np
 import json
 from config import (N_UAVS, TOTAL_SIMULATION_TIME, UAV_MAX_ENERGY, UAV_MIN_ENERGY,
-                    DELTA_T, DEBUG_LEVEL, AREA_WIDTH, AREA_HEIGHT, SIMULATION_SEED)
+                    DELTA_T, DEBUG_LEVEL, DECISION_ALGORITHM, AREA_HEIGHT, SIMULATION_SEED)
 from simulation_environment import SimulationEnvironment
 
 # 尝试导入绘图模块，如果失败则禁用绘图功能
@@ -82,7 +82,7 @@ def main():
     output_plot_dir = "simulation_plots"
 
     try:
-        log_filename = f"simulation_log_N{N_UAVS}_T{int(TOTAL_SIMULATION_TIME)}.json"
+        log_filename = f"{DECISION_ALGORITHM}_log_N{N_UAVS}_T{int(TOTAL_SIMULATION_TIME)}.json"
         with open(log_filename, "w", encoding="utf-8") as f:
             json.dump(env.simulation_log, f, ensure_ascii=False, indent=4)
         print(f"详细仿真日志已保存到: {log_filename}")
